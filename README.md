@@ -1,24 +1,34 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Сервис трансформации изображений
 
-Things you may want to cover:
+## Системные требования
+* Ruby 2.5.0+
+* Rails 5.2.0+
+* ImageMagick 6.9+
 
-* Ruby version
+База данных не нужна
 
-* System dependencies
+## Установка
+```bash
+git clone git@github.com:SteveRedka/image_transformer.git
+cd image_transformer
+bundle install
+```
 
-* Configuration
+## Использование
+На эндпоинт transform посылается файл и строка с параметрами типа `-resize 200x200`. Синтаксис тот же, что в imagemagick.
 
-* Database creation
+Пример:
+```bash
+curl -F 'transform[file]=@spec/fixtures/cats.png' -F 'transform[transformations]=-negate -resize 300x600!' http://localhost:3000/transform  --output output.png
+```
 
-* Database initialization
+## Комментарии
+Поскольку в задаче не было указано, в каком виде следует передавать параметры, я сделал это самым простым способом.
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Помимо этого, их можно было бы передавать не в виде слитной строки, а по отдельности:
+```
+# Это гипотетический, не рабочий код
+curl -F 'transform[file]=@spec/fixtures/cats.png' -F 'transform[resize]=300x600!' -F transform[negate]=true http://localhost:3000/transform  --output output.png
+```
